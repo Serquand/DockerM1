@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:16-alpine
 
 # Change the directory where we work in
 WORKDIR /app

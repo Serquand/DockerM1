@@ -1,14 +1,112 @@
-import React from "react";
-import Home from "./components/home";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import './index.css';
+import HeaderBar from "./components/HeaderBar";
+import FormCreationTask from "./components/FormCreationTask";
+import Modal from "./components/Modal";
+import Category from "./components/Category";
 
-import "./App.css";
+const Home = () => {
+    const API_URL = process.env.REACT_APP_API_URL;
 
-function App() {
-  return (
-    <div className="container">
-      <Home />
-    </div>
-  );
-}
+    const [todos, setTodos] = useState([{
+        id: 1, 
+        dueDate: new Date(), 
+        description: "This task is to do", 
+        title: "To Do"
+    }, {
+        id: 2, 
+        dueDate: new Date(), 
+        description: "This task is to do", 
+        title: "To Do"
+    }, {
+        id: 1, 
+        dueDate: new Date(), 
+        description: "This task is to do", 
+        title: "To Do"
+    }, {
+        id: 2, 
+        dueDate: new Date(), 
+        description: "This task is to do", 
+        title: "To Do"
+    }, 
+    {
+        id: 1, 
+        dueDate: new Date(), 
+        description: "This task is to do", 
+        title: "To Do"
+    }, {
+        id: 2, 
+        dueDate: new Date(), 
+        description: "This task is to do", 
+        title: "To Do"
+    }]);
 
-export default App;
+    const [done, setDone] = useState([{
+        id: 1, 
+        dueDate: new Date(), 
+        description: "This task is done", 
+        title: "Done"
+    }]);
+    
+    const [creationTaskRunning, setCreationTaskRunning] = useState(false);
+    
+    useEffect(() => {
+        // const getData = async () => {
+            // getTodos();
+        // };
+        // getData();
+    }, []);
+
+    const getTodos = async () => {
+        try {
+            const res = await axios.get(`${API_URL}/todos`);
+            console.log(res);
+            setTodos(res.data);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const endCreationTask = async () => {
+        await getTodos();
+        setCreationTaskRunning(false);
+    }
+
+    const openCreationTaskModal = () => {
+        setCreationTaskRunning(true);
+    }
+
+    return (
+        <>
+            <HeaderBar 
+                handleClickOnCreateEvent={openCreationTaskModal}
+            />
+
+            <main>
+                {todos.length > 0 ? <Category 
+                    onUpdateTask={getTodos} 
+                    title='Tâches à faire' 
+                    tasks={todos} 
+                    complete={false}
+                /> : null}
+
+                {done.length > 0 ? <Category 
+                    onUpdateTask={getTodos} 
+                    title='Tâches réalisées' 
+                    tasks={done} 
+                    complete={true}
+                /> : null}
+            </main>        
+
+            {creationTaskRunning ? <Modal titleModal='Créer une tâche'>
+                <FormCreationTask 
+                    onCreateTask={() => endCreationTask() } 
+                    onCloseForm={() => setCreationTaskRunning(false) } 
+                />
+            </Modal> : null}
+        </>
+    );
+};
+
+export default Home;

@@ -6,7 +6,7 @@ const createTask = async (req, res) => {
     const todo = new Todo({
         title: req.body.title,
         description: req.body.description,
-        is_complete: req.body.is_complete || false,
+        is_complete: false,
         due_date: req.body.due_date || new Date(),
     });
 
