@@ -1,44 +1,45 @@
-version: "3.8" 
+version: "3.8" # Define the version of the docker compose
 
 # Define the different services we will used
 services:
   frontend: # The React App
-    build: ./frontend
-    depends_on:
-      - backend
-      - mongo # Not needed because frontend depends on backend which depends on mongo but can be a good way to deal
-    ports:
+    build: ./frontend # Will search the Dockerfile for the frontend
+    depends_on: # List of dependencies => the app will be started after the dependencies have been started
+      - backend 
+      - mongo # Not needed because frontend depends on backend which depends on mongo but can be a good way 
+    ports: # List of ports exposed, <local_port>:<container_port>
       - "3000:3000"
-    networks:
+    networks: # Definition of networks the container will be in
       - network-project-m1
   
   backend: # The ExpressJS app
-    build: ./backend
-    depends_on:
+    build: ./backend # Will search the Dockerfile for the backend
+    depends_on: # List of dependencies => the app will be started after the dependencies have been started
       - mongo
-    ports:
+    ports: # List of ports exposed, <local_port>:<container_port>
       - "3001:3001"
-    networks: 
+    networks: # Definition of networks the container will be in
       - network-project-m1
       - network-backend-project
   
   mongo: # The database container
-    image: mongo
-    restart: always
+    image: mongo # The basis image for the database
+    restart: always # Always restart the database
     volumes: 
-      - mongodb_data:/data/db
-    environment: 
+      - mongodb_data:/data/db # Refer to the mongodb_data volume (see below for details)
+    environment: # Basis environment variable for the database
       MONGODB_INITDB_ROOT_USERNAME: username
       MONGODB_INITDB_ROOT_PASSWORD: password
-    ports:
+    ports: # List of ports exposed, <local_port>:<container_port>
       - 27017:27017
-    networks: 
+    networks: # Definition of networks the container will be in
       - network-project-m1
       - network-backend-project
 
+# Define the different networks of the app
 networks: 
   network-backend-project:
   network-project-m1:
 
-volumes: 
+volumes: # List of volumes => when we write in the database, write in the volume and we can handle the persistency of the data by this way
   mongodb_data:
