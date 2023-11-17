@@ -1,6 +1,0 @@
-# Each file here won't be added into the image
-node_modules
-npm-debug.log
-**/.git
-**/.DS_STORE
-**/node_modules
