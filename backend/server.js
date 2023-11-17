@@ -1,22 +1,27 @@
 const express = require("express");
 const cors = require('cors');
 const mongoose = require("mongoose"); 
+
+const todos = require('./routes/todos.routes');
+
 const port = 3001;
-const routes = require("./routes");
 
 main().catch((err) => console.log(err));
 
 async function main() {
-  await mongoose.connect("mongodb://mongo:27017/todos", {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-  });
-  const app = express();
-  app.use(cors());
-  app.use(express.json());
-  app.use("/api", routes);
+    await mongoose.connect("mongodb://mongo:27017/todos", {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+    });
 
-  app.listen(port, () => {
-    console.log(`Server is listening on port: ${port}`);
-  });
+    const app = express();
+
+    app.use(cors());
+    app.use(express.json());
+  
+    app.use("/todos", todos);
+
+    app.listen(port, () => {
+        console.log(`Server is listening on port: ${port}`);
+    });
 }

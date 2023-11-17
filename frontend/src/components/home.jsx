@@ -11,7 +11,7 @@ import {
     ModalBody,
     ModalHeader,
 } from "reactstrap";
-import TodoForm from "./todo-form";
+import TodoForm from "./CreateTask";
 
 const API_URL = process.env.REACT_APP_API_URL;
 

@@ -1,4 +1,4 @@
-const Todo = require("../models/todo");
+const Todo = require("../models/todo.models");
 
 const createTask = async (req, res) => {
     console.log(req.body);
@@ -9,7 +9,7 @@ const createTask = async (req, res) => {
         is_complete: req.body.is_complete || false,
         due_date: req.body.due_date || new Date(),
     });
-    
+
     await todo.save();
     res.send(todo);
 }
@@ -34,8 +34,9 @@ const updateTask = async (req, res) => {
 
 const getTasks = async (req, res) => {
     const todos = await Todo.find({ is_complete: false });
+    const done = await Todo.find({ is_complete: true });
 
-    res.send(todos);
+    res.send({todos, done});
 }
 
 const deleteTasks = async (req, res) => {
