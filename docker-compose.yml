@@ -1,0 +1,44 @@
+version: "3.8" 
+
+# Define the different services we will used
+services:
+  frontend: # The React App
+    build: ./frontend
+    depends_on:
+      - backend
+      - mongo # Not needed because frontend depends on backend which depends on mongo but can be a good way to deal
+    ports:
+      - "3000:3000"
+    networks:
+      - network-project-m1
+  
+  backend: # The ExpressJS app
+    build: ./backend
+    depends_on:
+      - mongo
+    ports:
+      - "3001:3001"
+    networks: 
+      - network-project-m1
+      - network-backend-project
+  
+  mongo: # The database container
+    image: mongo
+    restart: always
+    volumes: 
+      - mongodb_data:/data/db
+    environment: 
+      MONGODB_INITDB_ROOT_USERNAME: username
+      MONGODB_INITDB_ROOT_PASSWORD: password
+    ports:
+      - 27017:27017
+    networks: 
+      - network-project-m1
+      - network-backend-project
+
+networks: 
+  network-backend-project:
+  network-project-m1:
+
+volumes: 
+  mongodb_data:
