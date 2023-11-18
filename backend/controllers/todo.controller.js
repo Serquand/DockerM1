@@ -11,7 +11,8 @@ const createTask = async (req, res) => {
     });
 
     await todo.save();
-    res.send(todo);
+
+    res.status(201).json(todo);
 }
 
 const updateTask = async (req, res) => {
@@ -25,10 +26,9 @@ const updateTask = async (req, res) => {
         }
 
         await todo.save();
-        res.send(todo);
+        res.status(200).json(todo);
     } catch {
-        res.status(404);
-        res.send({ error: "Todo does not exist!" });
+        res.status(404).json({ error: "Todo does not exist!" });
     }
 }
 
@@ -36,16 +36,16 @@ const getTasks = async (req, res) => {
     const todos = await Todo.find({ is_complete: false });
     const done = await Todo.find({ is_complete: true });
 
-    res.send({todos, done});
+    res.status(200).send({todos, done});
 }
 
 const deleteTasks = async (req, res) => {
     try {
         await Todo.deleteOne({ _id: req.params.id });
-        res.status(204).send();
+
+        res.status(204).json();
     } catch {
-        res.status(404);
-        res.send({ error: "Todo does not exist!" });
+        res.status(404).json({ error: "Todo does not exist!" });
     }
 }
 

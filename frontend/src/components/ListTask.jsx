@@ -10,8 +10,8 @@ const ListTask = ({ onUpdateTask, complete, tasks }) => {
                     dueDate={task.due_date}
                     isComplete={complete}
                     onUpdateTask={onUpdateTask}
-                    id={task.id}
-                    key={task.id}
+                    id={task._id}
+                    key={task._id}
                 />
             ))}
         </div>

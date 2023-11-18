@@ -9,64 +9,28 @@ import Category from "./components/Category";
 const Home = () => {
     const API_URL = process.env.REACT_APP_API_URL;
 
-    const [todos, setTodos] = useState([{
-        id: 1, 
-        dueDate: new Date(), 
-        description: "This task is to do", 
-        title: "To Do"
-    }, {
-        id: 2, 
-        dueDate: new Date(), 
-        description: "This task is to do", 
-        title: "To Do"
-    }, {
-        id: 1, 
-        dueDate: new Date(), 
-        description: "This task is to do", 
-        title: "To Do"
-    }, {
-        id: 2, 
-        dueDate: new Date(), 
-        description: "This task is to do", 
-        title: "To Do"
-    }, 
-    {
-        id: 1, 
-        dueDate: new Date(), 
-        description: "This task is to do", 
-        title: "To Do"
-    }, {
-        id: 2, 
-        dueDate: new Date(), 
-        description: "This task is to do", 
-        title: "To Do"
-    }]);
-
-    const [done, setDone] = useState([{
-        id: 1, 
-        dueDate: new Date(), 
-        description: "This task is done", 
-        title: "Done"
-    }]);
-    
+    const [todos, setTodos] = useState([]);
+    const [done, setDone] = useState([]);
     const [creationTaskRunning, setCreationTaskRunning] = useState(false);
     
-    useEffect(() => {
-        // const getData = async () => {
-            // getTodos();
-        // };
-        // getData();
-    }, []);
-
     const getTodos = async () => {
         try {
             const res = await axios.get(`${API_URL}/todos`);
             console.log(res);
-            setTodos(res.data);
+            
+            setTodos(res.data.todos);
+            setDone(res.data.done);
         } catch (err) {
             console.error(err);
         }
     };
+
+    useEffect(() => {
+        const getData = async () => {
+            getTodos();
+        };
+        getData();
+    }, []); // eslint-disable-line
 
     const endCreationTask = async () => {
         await getTodos();

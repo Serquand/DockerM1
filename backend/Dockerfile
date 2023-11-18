@@ -5,7 +5,7 @@ FROM node:alpine
 WORKDIR /usr/src/app
 
 # Install application dependencies
-COPY package*.json ./
+COPY package.json ./
 RUN npm install
 
 # Copy app files
